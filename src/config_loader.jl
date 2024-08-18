@@ -2,8 +2,6 @@ include("entities.jl")
 
 using TOML
 
-using Flux
-
 function parse_input_file(file_path = "input.toml")
     settings = TOML.parsefile(file_path)
     teacher_settings = settings["teacher_model"]

@@ -1,20 +1,18 @@
 include("entities.jl")
 
-using Statistics
 using Random
+using Flux
 
-function train(
+function train_different_input_size(
         teacher::Flux.Chain, student::Flux.Chain, teacher_params::NeuralNetParams,
         student_params::NeuralNetParams, params::TrainingParams)
-    opt = Flux.setup(Flux.Adam(params.learning_rate), student)
+    opt_state = Flux.setup(Flux.Adam(params.learning_rate), student)
     losses = Vector{Float64}(undef, params.epochs)
-
+    coef = params.input_scale_coef
     input_size = maximum([teacher_params.structure[1], student_params.structure[1]])
     random_input = Vector{Float64}(undef, input_size)
 
-    loss(model, x, y) = mean(abs2.(model(x) .- y))
-
-    for i in 1:(params.epochs)
+    for epoch in 1:(params.epochs)
         rand!(random_input)
         random_input .*= params.input_scale_coef
         teacher_input = @view random_input[1:teacher_params.structure[1]]
@@ -22,41 +20,37 @@ function train(
 
         target_output = teacher(teacher_input)
 
-        data = [(student_input, target_output)]
-        Flux.train!(loss, student, data, opt)
+        loss, grads = Flux.withgradient(student) do m
+            student_output = m(student_input)
+            Flux.mse(student_output, target_output)
+        end
+        Flux.update!(opt_state, student, grads[1])
+        losses[epoch] = loss
 
-        loss_value = loss(
-            student, student_input, target_output)
-        losses[i] = loss_value
-
-        if i % (params.epochs // 10) == 0
-            print("\rIteration $i: loss = $(loss_value)")
+        if epoch % (params.epochs // 10) == 0
+            print("\rEpoch $epoch: loss_mse = $(loss)")
         end
     end
 
     return student, losses
 end
 
-function train_old(
+function train(
         teacher::Flux.Chain, student::Flux.Chain, teacher_params::NeuralNetParams,
         student_params::NeuralNetParams, params::TrainingParams)
-    opt = Flux.setup(Flux.Adam(params.learning_rate), student)
+    opt_state = Flux.setup(Flux.Adam(params.learning_rate), student)
     losses = Vector{Float64}(undef, params.epochs)
     coef = params.input_scale_coef
-    for i in 1:(params.epochs)
+
+    for epoch in 1:(params.epochs)
         random_input = coef .* rand(Float64, teacher_params.structure[1])
         target_output = teacher(random_input)
-
-        loss(model, x, y) = mean(abs2.(model(x) .- y))
-        loss_value = loss(student, random_input, target_output)
-        losses[i] = loss_value
-
-        data = [(random_input, target_output)]
-        Flux.train!(loss, student, data, opt)
-
-        if i % (params.epochs // 10) == 0
-            print("\rIteration $i: loss = $(loss_value)")
+        loss, grads = Flux.withgradient(student) do m
+            student_output = m(random_input)
+            Flux.mse(student_output, target_output)
         end
+        Flux.update!(opt_state, student, grads[1])
+        losses[epoch] = loss
     end
 
     return student, losses

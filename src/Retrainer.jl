@@ -1,7 +1,9 @@
 module Retrainer
 
-include("config_loader.jl")
+using Flux
+
 include("entities.jl")
+include("config_loader.jl")
 include("model_loader.jl")
 include("model_initializer.jl")
 include("logger.jl")
@@ -24,17 +26,8 @@ function main()
     hello_message(input_file_name, teacher_file_path, student_file_path,
         teacher_params, student_params, training_params, testing_params)
 
-    println()
-    println("[INFO]: TRAIN")
-    @timev student_model, losses = train(
+    student_model, losses = train(
         teacher_model, student_model, teacher_params, student_params, training_params)
-    println()
-
-    println()
-    println("[INFO]: TRAIN OLD")
-    @timev student_model, losses = train_old(
-        teacher_model, student_model, teacher_params, student_params, training_params)
-    println()
 
     compute_model_accuracy(
         student_model, teacher_model, student_params, teacher_params, testing_params)

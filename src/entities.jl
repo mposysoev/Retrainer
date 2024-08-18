@@ -1,5 +1,3 @@
-using Flux
-
 struct NeuralNetParams
     structure::Vector{Int64}
     activations::Vector{String}

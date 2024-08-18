@@ -26,6 +26,7 @@ function get_network_activations(model::Flux.Chain)::Vector{String}
     return activation_functions
 end
 
+# FIXME: incorrect
 function check_bias_usage(model::Flux.Chain)::Bool
     for layer in model.layers
         if !hasproperty(layer, :bias) || layer.bias === nothing

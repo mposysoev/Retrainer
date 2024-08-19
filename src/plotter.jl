@@ -43,13 +43,21 @@ function plot_model_parameters(model::Flux.Chain)
     end
 end
 
-function plot_loss_function(losses::Vector{Float64}, console = false)
-    p = plot(losses; yaxis = "loss", xaxis = (:log10, "epoch"),
-        label = "Loss function", size = (1200, 800), fmt = :png)
+function plot_loss_function(losses::Vector{Float64})
+    filename = "loss-function-plot.png"
+    title = "Loss Function"
 
-    if console
-        savefig(p, "loss-function-plot.png")
-    else
-        display(p)
+    if isempty(losses)
+        error("Input vector 'losses' cannot be empty.")
     end
+
+    period = Int(round(sqrt(length(losses))))
+    moving_average = [mean(losses[max(1, i - period + 1):i]) for i in 1:length(losses)]
+
+    p = plot(losses; xaxis = (:log10, "epoch"), yaxis = "loss",
+        label = "Loss function", size = (1300, 800), fmt = :png, title = title)
+
+    plot!(p, moving_average; label = "Moving Average", linewidth = 2.0)
+
+    savefig(p, filename)
 end

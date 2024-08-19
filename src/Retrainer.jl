@@ -1,6 +1,7 @@
 module Retrainer
 
 using Flux
+using Dates
 
 include("entities.jl")
 include("config_loader.jl")
@@ -14,6 +15,7 @@ include("model_saver.jl")
 include("model_tester.jl")
 
 function main()
+    start_time = Dates.now()
     input_file_name = "input.toml"
     student_params, training_params, testing_params, teacher_file_path,
     student_file_path = parse_input_file(input_file_name)
@@ -37,5 +39,11 @@ function main()
     plot_loss_function(losses)
 
     save_model(student_model, student_file_path)
+
+    finish_time = Dates.now()
+    elapsed_time = Dates.canonicalize(finish_time - start_time)
+    println()
+    println("- Elapsed time:   \t", elapsed_time)
+    println()
 end
 end # module Retrainer

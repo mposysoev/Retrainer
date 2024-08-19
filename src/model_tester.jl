@@ -16,6 +16,9 @@ function compute_model_accuracy(
         difference[i] = abs(teacher_output[1] - student_output[1]) / teacher_output[1]
     end
 
+    mean_error = Statistics.mean(difference) * 100
+    std_error = Statistics.std(difference) * 100
+
     println()
-    println("Student model error: $(mean(difference)) ± $(Statistics.std(difference))")
+    println("Student model error: $(round(mean_error, digits=2))% ± $(round(std_error, digits=2))%")
 end

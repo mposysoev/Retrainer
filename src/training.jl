@@ -39,7 +39,7 @@ function train(
         teacher::Flux.Chain, student::Flux.Chain, teacher_params::NeuralNetParams,
         student_params::NeuralNetParams, params::TrainingParams)
     opt_state = Flux.setup(Flux.Adam(params.learning_rate), student)
-    losses = Vector{Float64}(undef, params.epochs)
+    losses = zeros(Float64, params.epochs)
     coef = params.input_scale_coef
 
     for epoch in 1:(params.epochs)

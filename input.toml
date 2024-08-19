@@ -11,7 +11,7 @@ use_bias = true
 precision = "f64"
 
 [training]
-epochs = 100000
+epochs = 2000000
 learning_rate = 0.001
 input_scale_coef = 16
 

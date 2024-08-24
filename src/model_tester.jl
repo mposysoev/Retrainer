@@ -13,7 +13,7 @@ function compute_model_accuracy(
         random_input = params.input_scale_coef .* rand(Float64, input_size)
         teacher_output = teacher(random_input[1:teacher_params.structure[1]])
         student_output = student(random_input[1:student_params.structure[1]])
-        difference[i] = abs(teacher_output[1] - student_output[1]) / teacher_output[1]
+        difference[i] = abs((teacher_output[1] - student_output[1]) / teacher_output[1])
     end
 
     mean_error = Statistics.mean(difference) * 100

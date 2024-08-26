@@ -1,18 +1,19 @@
-# Input file for NN Extender
-# input.structure -- structure of your neural network BEFORE extending
-# output.structure -- structure of your neural network AFTER extending
+# Input file for Retrainer
 
-[input]
-file_name = "model-iter-101.bson"
-structure = [8, 30, 30, 30, 1]
-activations = ["identity", "relu", "relu", "identity"]
-bias = false
-f64 = true
+[teacher_model]
+file_path = "example-methanol-model.bson"
 
-[output]
-file_name ="output_model.bson"
+[student_model]
+file_name = "retrained-model.bson"
 structure = [8, 10, 8, 1]
 activations = ["identity", "relu", "identity"]
-bias = false
-f64 = true
+use_bias = true
+precision = "f64"
 
+[training]
+epochs = 2000000
+learning_rate = 0.001
+input_scale_coef = 16
+
+[testing]
+samples_num = 10000

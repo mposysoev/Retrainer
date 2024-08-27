@@ -15,7 +15,7 @@ include("model_saver.jl")
 include("model_tester.jl")
 
 export run_initial_training, run_fine_tuning, NeuralNetParams, TrainingParams,
-       TestingParams, plot_model_parameters, plot_loss_function
+       TestingParams, plot_model_parameters, plot_loss_function, parse_input_file, FineTuningParams
 
 function run_initial_training(
         student_params::NeuralNetParams, training_params::TrainingParams,

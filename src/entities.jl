@@ -15,3 +15,8 @@ struct TestingParams
     input_scale_coef::Float64
     samples_num::Int64
 end
+
+struct FineTuningParams
+    use_fine_tuning::Bool
+    file_name::String
+end

@@ -11,9 +11,13 @@ use_bias = true
 precision = "f64"
 
 [training]
-epochs = 2000000
+epochs = 1000000
 learning_rate = 0.001
 input_scale_coef = 16
 
 [testing]
-samples_num = 10000
+samples_num = 100000
+
+[fine_tuning]
+use_fine_tuning = false
+fine_tuned_file_name = "fine-tuned-model.bson"

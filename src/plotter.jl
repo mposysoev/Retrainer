@@ -43,7 +43,7 @@ function plot_model_parameters(model::Flux.Chain)
     end
 end
 
-function plot_loss_function(losses::Vector{Float64}, filename = "loss_function_plot.png")
+function plot_loss_function(losses::Vector{Float64}, filename = "loss_function_plot.png", save_png = false)
     save = false
 
     if isempty(losses)
@@ -64,7 +64,7 @@ function plot_loss_function(losses::Vector{Float64}, filename = "loss_function_p
         label = "Loss function", size = (800, 600), fmt = :png, title = title)
 
     plot!(p, moving_average; label = "Moving Average", linewidth = 2.0)
-    if save
+    if save || save_png
         savefig(p, filename)
         return
     end

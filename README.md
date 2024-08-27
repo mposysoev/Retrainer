@@ -21,7 +21,7 @@ This command creates file `Manifest.toml`. It means that you are ready to run th
 There are two ways to run this code:
 
 1. From `Jupyter Notebook` (recommended). For this, you need to run all cells from `run_me.ipynb` file. It will do everything for `example-methanol-model.bson` file automatically.
-2. (NOT YET IMPLEMENTED) From the terminal. If you want to run this program as a command-line application:
+2. From the terminal. If you want to run this program as a command-line application:
    - Configure `input.toml`
    - `julia main.jl` – to see help
    - or `make run` to run the example

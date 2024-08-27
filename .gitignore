@@ -1,3 +1,7 @@
 *.bson
+!example-methanol-model.bson
+
 *.png
 !images/*
+
+Manifest.toml
